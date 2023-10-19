@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="敲电子木鱼，享赛博人生">
+    <title>木鱼</title>
+
+    <!--浏览器标签ICO-->
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="bookmark" href="favicon.ico" />
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        .container {
+            width: 90vw;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text {
+            position: relative;
+        }
+
+        .count {
+            color: #fff;
+            position: relative;
+            text-align: center;
+        }
+
+
+        .click {
+            animation: am ease 0.5s;
+        }
+
+        span {
+            color: #fff;
+            /* font-weight: bold; */
+            font-size: 20px;
+            width: 200px;
+            position: absolute;
+            top: -120px;
+            left: -20px;
+            opacity: 0;
+            animation: am2 ease-out 1.5s;
+        }
+
+
+        @keyframes am {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            30% {
+                transform: scale(0.98, 0.98);
+            }
+
+            60% {
+                transform: scale(1.01, 1.01);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+
+        @keyframes am2 {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-35px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="count"></div>
+    <div class="container">
+        <img src="./images/muyu.png" alt="" onclick="knocking()">
+        <div class="text"></div>
+    </div>
+
+    <script>
+
+        //次数
+        let c = 0;
+        //数组计数
+        let d = 0;
+
+        //音频路径
+        let audio = new Audio("./images/muyu.mp3");
+        // let audio = new Audio("./images/zhiyin.wav");
+
+        //输出次数
+        count();
+
+
+        //主函数
+        function knocking() {
+            //木鱼
+            muyu();
+            //功德
+            gongde();
+            //声音
+            sound();
+            //计数
+            count(1);
+        }
+
+        function muyu() {
+            let node = document.querySelector("img");
+            if (node.classList.contains("click")) {
+                node.classList.remove("click");
+                void node.offsetWidth; //强制浏览器计算元素样式
+                node.classList.add("click"); //会重新启动动画
+            } else {
+                node.classList.add("click");
+            }
+        }
+
+        function gongde() {
+            let node = document.querySelector(".text");
+            let newNode = document.createElement("span");
+
+            // // 数组（一定要会背，不许出错）
+            // let arr = ["富强","民主","文明","和谐","自由","平等","公正","法治","爱国","敬业","诚信","友善"];
+            // if (d > 11) d = 0;
+            // let str = arr[d];
+            // d++;
+            // newNode.textContent = str;
+
+            newNode.textContent = "功德+1";
+            node.appendChild(newNode);
+
+            setTimeout(function () {
+                newNode.remove();
+            }, 2000)
+        }
+
+        function sound() {
+            if (audio.paused) {
+                audio.play(); //直接播放
+            } else {
+                audio.pause(); //停止
+                audio.currentTime = 0; //重置音频进度
+                audio.play(); //重新播放
+            }
+        }
+
+        function count(e = 0) {
+            if (e) c++; // 默认0载入页面调用 1点击木鱼调用 
+            if (window.localStorage) {
+                if (localStorage.getItem("count") == null) {
+                    localStorage.setItem("count", 0); //设置初始值
+                } else {
+                    if (!e) {
+                        c = localStorage.getItem("count");
+                    } else {
+                        localStorage.setItem("count", c);
+                    }
+                }
+            }
+            //
+            let node = document.querySelector(".count");
+            node.innerHTML = "您的功德：" + c;
+        }
+
+    </script>
+</body>
+
+</html>
